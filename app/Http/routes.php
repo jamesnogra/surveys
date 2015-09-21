@@ -35,3 +35,4 @@ Route::get("/surveys/create-survey-page", "SurveyController@createSurveyPage");
 Route::post("/surveys/create-survey-db", "SurveyController@createSurveyDB");
 Route::post("/surveys/upload-logo", "SurveyController@uploadLogo");
 Route::get("/surveys/create-actual-survey-page/{title}/{survey_id}", "SurveyController@createActualSurveyPage");
+Route::post("/surveys/update-value-survey-db", "SurveyController@updateValueSurveyDB");

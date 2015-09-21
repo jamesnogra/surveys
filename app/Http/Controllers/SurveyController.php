@@ -5,6 +5,7 @@
 	use Crypt;
 	use DB;
 	use App\User;
+	use App\Survey;
 	use App\Http\Controllers\Controller;
 	use Illuminate\Support\Facades\Input;
 	use URL;
@@ -78,7 +79,7 @@
 				$logo = "default.jpg";
 			}
 			if (strlen($_POST["the_password"]) > 0) {
-				$new_password = md5($_POST["the_password"]);
+				$new_password = Crypt::encrypt($_POST["the_password"]);
 			} else {
 				$new_password = "";
 			}
@@ -105,9 +106,31 @@
 		public function createActualSurveyPage($title, $survey_id) {
 			$survey_id = Crypt::decrypt($survey_id);
 			$survey_info = $this->getSurveyById($survey_id);
+			$survey_id = Crypt::encrypt($survey_id);
 			$user_id = Crypt::decrypt(session('user_id'));
 			$name = Crypt::decrypt(session('name'));
+			if (strlen($survey_info->password) > 0) {
+				$survey_info->password = Crypt::decrypt($survey_info->password);
+			}
 			return view("surveys/create-actual-survey-page", ["color1"=>$this->color1, "survey_id"=>$survey_id, "survey"=>$survey_info, "name"=>$name, "user_id"=>$user_id]);
+		}
+		
+		/**
+		 * updates certain fields in survey
+		 * 
+		 * @param  None
+		 * @return Response
+		 */
+		public function updateValueSurveyDB() {
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			$field = $_POST["field"];
+			$value = $_POST["value"];
+			if ($field=="password") {
+				$value = Crypt::encrypt($value);
+			}
+			DB::table("surveys")->where("survey_id", $survey_id)->update([$field=>$value]);
+			return json_encode(array("code"=>1, "message"=>$field." has been changed to ".$value."."));
+			//return ["code"=>1, "full_path"=>"", "file_name"=>"", "message"=>$field." has been changed to " . $value];
 		}
 		
 		/**
