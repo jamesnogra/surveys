@@ -8,7 +8,7 @@
 
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
-		<h1 style="float:left;">Unauthorized</h1>
+		<h4 style="float:left;margin-top:17px;">Unauthorized</h4>
 		<h4 style="float:right;padding-top:5px;">
 			<a href="/users/login-user-page" class="w3-btn">
 				<i class="material-icons w3-large">https</i> Login

@@ -8,11 +8,11 @@
 
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
-		<h1 style="float:left;">
-			<small><a href="/surveys/my-surveys-page" class="w3-btn">
+		<h4 style="float:left;">
+			<a href="/surveys/my-surveys-page" class="w3-btn">
 				<i class="material-icons">payment</i> My Surveys
-			</a></small>
-		</h1>
+			</a>
+		</h4>
 		<h4 style="float:right;padding-top:5px;">
 			<a href="/users/view-user-page/{{ urlencode($name) }}/{{ Crypt::encrypt($user_id) }}" class="w3-btn">
 				<i class="material-icons w3-large">person</i> My Profile
@@ -56,6 +56,7 @@
 					<hr>
 					<div class="w3-group" style=""> 
 						<button id="add-question-button" class="w3-btn w3-{{ $color1 }}">Add Question</button>
+						<button id="add-question-button" class="w3-btn">Save</button>
 					</div>
 				</div>
 				<div class="w3-group" id="questions-container">
@@ -70,9 +71,6 @@
 @section('jquery-scripts')
 	<script>
 	
-		var question_num = 0;
-		var question_num_with_deleted = 0;
-		var choices_num = new Array();
 		function Question(question_id, question_text, question_type)  {
 			this.question_id = question_id;
 			this.question_text = question_text;
@@ -90,8 +88,6 @@
 			$("#add-question-button").click(function() {
 				var at_question = all_questions.length;
 				all_questions[at_question] = new Question();
-				question_num++;
-				question_num_with_deleted++;
 				updateQuestionNumberDropDownList()
 				$("#questions-container").append(addTextOnlyTemplate(at_question));
 				$('#question-container-'+at_question).hide();
@@ -187,7 +183,6 @@
 		}
 		
 		function addTextOnlyTemplateContent(q) {
-			choices_num[question_num_with_deleted] = 0;
 			var temp_str = '<div class="w3-group">';
 			temp_str += '<input id="question-'+q+'-type" type="hidden" value="TEXT_ONLY">';
 			temp_str += '<input id="question-'+q+'-text" class="w3-input question-text" type="text" onBlur="changeQuestionValue('+q+');">';
@@ -347,7 +342,7 @@
 		function changeQuestionNumber(q) {
 			var index_from = q;
 			var index_to = $("#drop-down-question-number-"+q).val()-1;
-			console.log("Move question " + (index_from+1) + " to question " + (index_to+1));
+			//console.log("Move question " + (index_from+1) + " to question " + (index_to+1));
 			all_questions.splice(index_to, 0, all_questions.splice(index_from, 1)[0]);
 			$("#questions-container").fadeOut('fast', function() {
 				resetQuestionsIncludingUI();
@@ -372,7 +367,6 @@
 			all_questions[q].question_id = "DELETED";
 			all_questions[q].question_text = "DELETED";
 			all_questions[q].question_type = "DELETED";
-			question_num--;
 			$("#questions-container").fadeOut('fast', function() {
 				resetQuestionsIncludingUI();
 				updateQuestionNumberDropDownList();

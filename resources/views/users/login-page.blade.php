@@ -8,7 +8,7 @@
 
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
-		<h1>Login</h1>
+		<h4>Login</h4>
 	</header>
 	<div class="w3-container">	
 		<div class="w3-row">
@@ -55,14 +55,18 @@
 					data = JSON.parse(data);
 					if (data["code"] == 1) {
 						$("#the_password_error").html("");
+						$('#login-user-form').hide();
+						$('#loading-form').show();
 						window.location = "/surveys/my-surveys-page"
 					} else if (data["code"] == -1) {
 						$("#the_password_error").html("Incorrect username and password.");
+						$('#login-user-form').show();
+						$('#loading-form').hide();
 					} else {
 						$("#the_password_error").html("Something went wrong.");
+						$('#login-user-form').show();
+						$('#loading-form').hide();
 					}
-					$('#login-user-form').show();
-					$('#loading-form').hide();
 				});
 			});
 			

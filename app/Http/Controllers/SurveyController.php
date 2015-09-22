@@ -76,7 +76,7 @@
 			if (strlen($_POST["the_file_name_logo"]) > 0) {
 				$logo = $_POST["the_file_name_logo"];
 			} else {
-				$logo = "default.jpg";
+				$logo = "default.png";
 			}
 			if (strlen($_POST["the_password"]) > 0) {
 				$new_password = Crypt::encrypt($_POST["the_password"]);
@@ -87,7 +87,7 @@
 				"user_id" => $user_id,
 				"title" => $_POST["the_title"],
 				"description" => $_POST["the_description"],
-				"logo" => $_POST["the_file_name_logo"],
+				"logo" => $logo ,
 				"date" => date("Y-m-d H:i:s"),
 				"password" => $new_password,
 				"theme" => "default"
