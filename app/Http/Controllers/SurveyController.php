@@ -90,7 +90,8 @@
 				"logo" => $logo ,
 				"date" => date("Y-m-d H:i:s"),
 				"password" => $new_password,
-				"theme" => "default"
+				"theme" => "default",
+				"link_code" => str_random(16)
 			];
 			$new_user_id = DB::table('surveys')->insertGetId($new_survey);
 			$new_user_id = Crypt::encrypt($new_user_id);
@@ -134,6 +135,91 @@
 		}
 		
 		/**
+		 * adds all questions and choices in a survey
+		 * 
+		 * @param  survey_id, questions, and choices
+		 * @return Response
+		 */
+		public function saveSurveyQuestionsChoicesDB() {
+			$questions_choices = json_decode($_POST["questions_choices"]);
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			$this->deleteQuestionsAndChoices($survey_id);
+			$question_num = 1;
+			foreach($questions_choices as $item) {
+				$new_question = ["survey_id"=>$survey_id, "question_text"=>$item->question_text, "question_type"=>$item->question_type, "question_num"=>$question_num];
+				$new_question_id = DB::table('questions')->insertGetId($new_question);
+				$choice_num = 1;
+				foreach($item->choices as $choice) {
+					if ((isset($choice->choice_text)) && (strlen($choice->choice_text)>0)) {
+						$new_choice = ["survey_id"=>$survey_id, "choice_num"=>$choice_num, "choice_text"=>$choice->choice_text, "question_id"=>$new_question_id];
+						$new_choice_id = DB::table('choices')->insertGetId($new_choice);
+						$choice_num++;
+					}
+				}
+				$question_num++;
+			}
+			return "";
+		}
+		
+		/**
+		 * deletes a survey and all of its questions and choices
+		 * 
+		 * @param  survey_id
+		 * @return None
+		 */
+		public function getQuestionsChoicesDB() {
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			$survey_info = DB::table('surveys')->where("survey_id", $survey_id)->first();
+			$questions_choices = [];
+			$x = 0;
+			$questions = DB::table('questions')->where("survey_id", $survey_id)->get();
+			foreach($questions as $question) {
+				$questions_choices[$x] = $question;
+				$questions_choices[$x]->choices = DB::table('choices')->where("question_id", $question->question_id)->get();
+				$x++;
+			}
+			return json_encode($questions_choices);
+		}
+		
+		/**
+		 * deletes a survey and all of its questions and choices
+		 * 
+		 * @param  survey_id
+		 * @return None
+		 */
+		public function deleteSurveyDB() {
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			DB::table('surveys')->where("survey_id", $survey_id)->delete();
+			$this->deleteQuestionsAndChoices($survey_id);
+		}
+		
+		/**
+		 * deletes all questions and choices in a survey
+		 * 
+		 * @param  survey_id
+		 * @return None
+		 */
+		public function deleteQuestionsAndChoices($survey_id) {
+			DB::table('questions')->where("survey_id", $survey_id)->delete();
+			DB::table('choices')->where("survey_id", $survey_id)->delete();
+		}
+		
+		/**
+		 * generates a link to take a survey
+		 * 
+		 * @param  survey_id
+		 * @return None
+		 */
+		public function generateLinkCodeDB() {
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			$survey_info = $this->getSurveyByID($survey_id);
+			$link_id = str_random(16);
+			$link = URL::to('/') . "/" . urlencode($survey_info->title) . "?id=" . $link_id;
+			DB::table("surveys")->where("survey_id", $survey_id)->update(["link_code"=>$link_id]);
+			return ["code"=>1, "link"=>$link];
+		}
+		
+		/**
 		 * Upload logo for surveys
 			*
 		 * @param  None
@@ -142,7 +228,7 @@
 		public function uploadLogo() {
 			$user = new User();
 			if (!Input::hasFile('file')) {
-				return "File not found, please try again";
+				return ["code"=>-1, "full_path"=>"", "file_name"=>"", "message"=>"Upload failed."];
 			}
 			$uploaddir = "images/logo/";
 			$new_file_info = $this->uploadImg('file', $uploaddir);

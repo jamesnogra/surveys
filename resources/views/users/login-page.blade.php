@@ -8,7 +8,16 @@
 
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
-		<h4>Login</h4>
+		<div style="float:left;">
+			<h4>
+				Login
+			</h4>
+		</div>
+		<h4 style="float:right;">
+			<a href="/" class="w3-btn">
+				<i class="material-icons w3-large">home</i> Home
+			</a>
+		</h4>
 	</header>
 	<div class="w3-container">	
 		<div class="w3-row">

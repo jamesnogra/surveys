@@ -14,7 +14,7 @@
 				<i class="material-icons w3-large">payment</i> My Surveys
 			</a>
 		</h4>
-		<h4 style="float:right;padding-top:5px;">
+		<h4 style="float:right;">
 			<a href="/users/logout" class="w3-btn">
 				<i class="material-icons w3-large">arrow_forward</i> Logout
 			</a>

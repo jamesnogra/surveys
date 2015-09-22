@@ -36,3 +36,7 @@ Route::post("/surveys/create-survey-db", "SurveyController@createSurveyDB");
 Route::post("/surveys/upload-logo", "SurveyController@uploadLogo");
 Route::get("/surveys/create-actual-survey-page/{title}/{survey_id}", "SurveyController@createActualSurveyPage");
 Route::post("/surveys/update-value-survey-db", "SurveyController@updateValueSurveyDB");
+Route::post("/surveys/save-survey-questions-choices-db", "SurveyController@saveSurveyQuestionsChoicesDB");
+Route::post("/surveys/delete-survey-db", "SurveyController@deleteSurveyDB");
+Route::post("/surveys/get-questions-choices-db", "SurveyController@getQuestionsChoicesDB");
+Route::post("/surveys/generate-link-code-db", "SurveyController@generateLinkCodeDB");

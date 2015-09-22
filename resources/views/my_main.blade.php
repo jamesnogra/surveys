@@ -15,12 +15,11 @@
 				padding: 5px;
 			}
 			.custom-card-style {
-				width: 31%;
 				float: left;
-				margin: 5px;
 				max-height: 200px;
 				overflow: auto;
-				min-width: 200px;
+				width: 95%;
+				margin: 10px;
 			}
 			.question-text {
 				font-size: 24px;

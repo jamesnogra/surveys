@@ -14,7 +14,7 @@
 				<i class="material-icons w3-large">payment</i> My Surveys
 			</a>
 		</h4>
-		<h4 style="float:right;padding-top:5px;">
+		<h4 style="float:right;">
 			<a href="/users/view-user-page/{{ urlencode($name) }}/{{ Crypt::encrypt($user_id) }}" class="w3-btn">
 				<i class="material-icons w3-large">person</i> My Profile
 			</a>
@@ -28,6 +28,7 @@
 		<div class="w3-row">
 			<div class="w3-col l3">&nbsp;</div>
 			<div class="w3-col l6">
+				<div id="loading-icon" style="text-align:center;margin-top:100px;"><i style="color:#000000;" class="material-icons w3-xxxlarge w3-spin">refresh</i></div>
 				<div class="w3-container" id="create-survey-form">
 					<div class="w3-group">
 						<input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}" />
@@ -68,6 +69,8 @@
 @section('jquery-scripts')
 	<script>
 		$(document).ready(function() {
+			
+			afterLoading();
 			
 			$("#the_logo").on("change", function (e) {
 				$("#the_logo_error").html('<i style="color:#000000;" class="material-icons w3-xxxlarge w3-spin">refresh</i>');
@@ -114,6 +117,7 @@
 				var the_password = $("#the_password").val();
 				var the_file_name_logo = $("#the_file_name_logo").val();
 				var submit = true;
+				beforeLoading();
 				if (the_title.length < 1) {
 					$("#the_title_error").html("Title is required.");
 					submit = false;
@@ -133,12 +137,23 @@
 							window.location = "/surveys/create-actual-survey-page/"+the_title+"/"+data["new_user_id"];
 						} else {
 							$("#the_name_error").html("Something is wrong. Please try again later.");
+							afterLoading();
 						}
 					}).fail(function(error){
 						$("#the_name_error").html("Something is wrong. Please try again later.");
+						afterLoading();
 					});
 				}
 			});
+			
+			function beforeLoading() {
+				$("#loading-icon").show();
+				$("#create-survey-form").hide();
+			}
+			function afterLoading() {
+				$("#loading-icon").hide();
+				$("#create-survey-form").show();
+			}
 			
 		});
 	</script>

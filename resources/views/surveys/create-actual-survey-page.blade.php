@@ -13,7 +13,7 @@
 				<i class="material-icons">payment</i> My Surveys
 			</a>
 		</h4>
-		<h4 style="float:right;padding-top:5px;">
+		<h4 style="float:right;">
 			<a href="/users/view-user-page/{{ urlencode($name) }}/{{ Crypt::encrypt($user_id) }}" class="w3-btn">
 				<i class="material-icons w3-large">person</i> My Profile
 			</a>
@@ -56,11 +56,12 @@
 					<hr>
 					<div class="w3-group" style=""> 
 						<button id="add-question-button" class="w3-btn w3-{{ $color1 }}">Add Question</button>
-						<button id="add-question-button" class="w3-btn">Save</button>
+						<button id="save-survey-questions-choices-db" class="w3-btn">Save</button>
+						<button id="generate-link-code-db" class="w3-btn">Generate Link</button>
 					</div>
 				</div>
-				<div class="w3-group" id="questions-container">
-				</div>
+				<div class="w3-group" id="questions-container"></div>
+				<div class="w3-container" id="loading-form" style="text-align:center;"><i class="material-icons w3-xxxlarge w3-spin">refresh</i></div>
 			</div>
 			<div class="w3-col l2">&nbsp;</div>
 		</div>
@@ -70,6 +71,7 @@
 
 @section('jquery-scripts')
 	<script>
+	
 	
 		function Question(question_id, question_text, question_type)  {
 			this.question_id = question_id;
@@ -82,8 +84,55 @@
 			this.choice_text = choice_text;
 		}
 		var all_questions = [];
+		
 	
 		$(document).ready(function() {
+			
+			beforeLoading();
+			getQuestionsChoices();
+			function getQuestionsChoices() {
+				var _token = $("#_token").val();
+				var survey_id = $("#survey_id").val();
+				$.post("/surveys/get-questions-choices-db", {"survey_id":survey_id, "_token":_token}, function(data){
+					data = JSON.parse(data);
+					if (data.length > 0) {
+						var x, y;
+						var temp_array = [];
+						for (x=0; x<data.length; x++) {
+							temp_array[x] = new Question("question-id-"+x, data[x]["question_text"], data[x]["question_type"]);
+							if (data[x]["choices"].length>0) {
+								for (y=0; y<data[x]["choices"].length; y++) {
+									temp_array[x]["choices"][y] = new Choice("choice-id-"+y, data[x]["choices"][y]["choice_text"]);
+								}
+							}
+						}
+						all_questions = temp_array;
+						resetQuestionsIncludingUI();
+					}
+					afterLoading();
+				});
+			}
+			
+			function beforeLoading() {
+				$("#loading-form").show();
+				$("#questions-container").hide();
+				$("#save-survey-questions-choices-db").hide();
+			}
+			function afterLoading() {
+				$("#loading-form").hide();
+				$("#save-survey-questions-choices-db").show();
+				$("#questions-container").show();
+			}
+			
+			$("#save-survey-questions-choices-db").click(function() {
+				var _token = $("#_token").val();
+				var temp_array = JSON.stringify(all_questions);
+				var survey_id = $("#survey_id").val();
+				beforeLoading();
+				$.post("/surveys/save-survey-questions-choices-db", {"survey_id":survey_id, "questions_choices":temp_array, "_token":_token}, function(data){
+					afterLoading();
+				});
+			});
 			
 			$("#add-question-button").click(function() {
 				var at_question = all_questions.length;
@@ -93,6 +142,17 @@
 				$('#question-container-'+at_question).hide();
 				$('#question-container-'+at_question).fadeIn('fast');
 				//console.log("Number of existing questions: " + question_num + "\nNumber of questions including deleted ones: " + question_num_with_deleted + "\nNumber of Deleted Questions: " + (question_num_with_deleted-question_num));
+			});
+			
+			$("#generate-link-code-db").click(function() {
+				var _token = $("#_token").val();
+				var survey_id = $("#survey_id").val();
+				if (confirm("Are you sure to create new link for this survey? The old one will be deleted.")) {
+					$("#generate-link-code-db").hide();
+					$.post("/surveys/generate-link-code-db", {"survey_id":survey_id, "_token":_token}, function(data){
+						$("#generate-link-code-db").show();
+					});
+				}
 			});
 			
 			$("#the_logo").on("change", function (e) {
@@ -136,6 +196,7 @@
 			
 		});
 		
+		
 		//this template already contains the card container, only the contents of this will be replaced when question type is changed
 		function addTextOnlyTemplate(q, question_text) {
 			var temp_str = "";
@@ -172,7 +233,7 @@
 			all_questions[q].question_id = "question-id-"+q;
 			all_questions[q].question_text = $("#question-"+q+"-text").val();
 			all_questions[q].question_type = $("#question-"+q+"-type").val();
-			console.log(JSON.stringify(all_questions, null, 4));
+			//console.log(JSON.stringify(all_questions, null, 4));
 		}
 		
 		//this function will be called when a particular choice is edited

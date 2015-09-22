@@ -24,7 +24,7 @@ class Survey extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'title', 'description', 'logo', 'date', 'password', 'theme'];
+    protected $fillable = ['user_id', 'title', 'description', 'logo', 'date', 'password', 'theme', 'link_code'];
 
 
 }
