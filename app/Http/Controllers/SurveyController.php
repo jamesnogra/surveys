@@ -156,17 +156,19 @@
 			$this->deleteQuestionsAndChoicesAndResponses($survey_id);
 			$question_num = 1;
 			foreach($questions_choices as $item) {
-				$new_question = ["survey_id"=>$survey_id, "question_text"=>$item->question_text, "question_type"=>$item->question_type, "question_num"=>$question_num];
-				$new_question_id = DB::table('questions')->insertGetId($new_question);
-				$choice_num = 1;
-				foreach($item->choices as $choice) {
-					if ((isset($choice->choice_text)) && (strlen($choice->choice_text)>0)) {
-						$new_choice = ["survey_id"=>$survey_id, "choice_num"=>$choice_num, "choice_text"=>$choice->choice_text, "question_id"=>$new_question_id];
-						$new_choice_id = DB::table('choices')->insertGetId($new_choice);
-						$choice_num++;
+				if ((isset($item->question_text)) && (strlen($item->question_text)>0)) {
+					$new_question = ["survey_id"=>$survey_id, "question_text"=>$item->question_text, "question_type"=>$item->question_type, "question_num"=>$question_num];
+					$new_question_id = DB::table('questions')->insertGetId($new_question);
+					$choice_num = 1;
+					foreach($item->choices as $choice) {
+						if ((isset($choice->choice_text)) && (strlen($choice->choice_text)>0)) {
+							$new_choice = ["survey_id"=>$survey_id, "choice_num"=>$choice_num, "choice_text"=>$choice->choice_text, "question_id"=>$new_question_id];
+							$new_choice_id = DB::table('choices')->insertGetId($new_choice);
+							$choice_num++;
+						}
 					}
+					$question_num++;
 				}
-				$question_num++;
 			}
 			return "";
 		}
@@ -238,7 +240,11 @@
 		 */
 		function answerSurveyPage($title, $link_code) {
 			$survey_info = $this->getSurveyByLinkId($link_code);
-			return view("surveys/answer-survey-page", ["color1"=>$this->color1, "survey"=>$survey_info]);
+			$unique_respondent_id = str_random(64);
+			if ($survey_info->theme != "default") { //get the theme for this survey
+				$this->color1 = $survey_info->theme;
+			}
+			return view("surveys/answer-survey-page", ["color1"=>$this->color1, "survey"=>$survey_info, "unique_respondent_id"=>$unique_respondent_id]);
 		}
 		
 		/**
@@ -250,7 +256,8 @@
 		function saveResponsesDB() {
 			$questions_choices = json_decode($_POST["responses"]);
 			$survey_id = Crypt::decrypt($_POST["survey_id"]);
-			$unique_respondent_id = str_random(64);
+			$unique_respondent_id = $_POST["unique_respondent_id"];
+			DB::table('responses')->where("unique_respondent_id", $unique_respondent_id)->delete();
 			$ip_address = $_SERVER['REMOTE_ADDR'];
 			foreach($questions_choices as $question) {
 				$question_id = $question->question_id;

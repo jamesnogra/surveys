@@ -13,6 +13,8 @@
 	{
 		private $color1;
 		
+		public $available_themes = ["red", "pink", "purple", "deep-purple", "indigo", "blue", "light-blue", "cyan", "teal", "green", "light-green", "lime", "khaki", "yellow", "amber", "orange", "deep-orange", "blue-grey", "brown", "dark-grey", "black"];
+		
 		public function __construct() {
 			$this->color1 = "indigo";
 			if (!empty(session("color1"))) {
@@ -118,7 +120,31 @@
 			}
 			$user_id = Crypt::decrypt($user_id);
 			$user = DB::table('users')->where("user_id", $user_id)->first();
-			return view("users/view-user-page", ["user"=>$user, "color1"=>$this->color1]);
+			$surveys = DB::table('surveys')->where("user_id", $user_id)->get();
+			return view("users/view-user-page", ["user"=>$user, "color1"=>$this->color1, "surveys"=>$surveys]);
+		}
+		
+		/**
+		 * changes the theme of the main page or a survey
+		 * 
+		 * @param page
+		 * @return None
+		 */
+		public function changeThemePage($page, $survey_id=0) {
+			return view("users/change-theme-page", ["color1"=>$this->color1, "available_themes"=>$this->available_themes, "page"=>$page, "survey_id"=>$survey_id]);
+		}
+		
+		public function setThemeSession() {
+			$color1 = $_POST["color1"];
+			$page = $_POST["page"];
+			if ($page == "main") { //general theme
+				session(["color1"=>$color1]);
+				return ["code"=>1, "message"=>"General theme has been changed to " . $color1 . "."];
+			} else if ($page == "survey") {
+				$survey_id = Crypt::decrypt($_POST["survey_id"]);
+				DB::table("surveys")->where("survey_id", $survey_id)->update(["theme"=>$color1]);
+				return ["code"=>1, "message"=>"Survey theme has been changed to " . $color1 . "."];
+			}
 		}
 		
 		/**

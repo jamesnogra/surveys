@@ -33,9 +33,22 @@
 							<input name="file" type="file" id="the_picture" name="the_picture" accept="image/*" class="upload" />
 						</form>
 					</div>
+					<center style="font-size:9px;"><a class="w3-btn w3-{{ $color1 }}" href="/users/change-theme-page/main">Change Theme</a></center>
 				</div>
-				<div style="float:left;margin-left:20px;margin-top:40px;">
+				<div style="float:left;margin-left:20px;margin-top:40px;width:70%;">
 					<h3>{{ $user->name }}</h3>
+					<div style="width:1px;height:50px;"></div>
+					@foreach ($surveys as $survey)
+						<hr />
+						<div class="survey-container" style="width:100%;">
+							<div class="survey-logo" style="float:left;width:100px;height:100px;overflow:hidden;margin-right:10px;"><img src="/images/logo/{{ $survey->logo }}" height="100px" width="100px" /></div>
+							<div style="float:left;width:65%;">
+								<div style="margin-top:10px;font-size:28px;overflow:hidden;">{{ $survey->title }}</div>
+								<div style="overflow:hidden;"><a class="w3-btn" href="/surveys/create-actual-survey-page/{{ urlencode($survey->title) }}/{{ Crypt::encrypt($survey->survey_id) }}">Edit</a></div>
+							</div>
+							<div style="width:1px;height:10px;clear:both;"></div>
+						</div>
+					@endforeach
 				</div>
 			</div>
 			<div class="w3-container" id="loading-form" style="text-align:center;margin-top:100px;"><i class="material-icons w3-xxxlarge w3-spin">refresh</i></div>

@@ -27,6 +27,8 @@ Route::get("/users/view-user-page/{name}/{user_id}", "UserController@viewUserPag
 Route::get("/users/add-user-page", "UserController@addUserPage");
 Route::post("/users/add-user-db", "UserController@addUserDB");
 Route::post("/users/upload-picture", "UserController@uploadPicture");
+Route::get("/users/change-theme-page/{where}/{survey_id?}", "UserController@changeThemePage");
+Route::post("/users/set-theme-session/", "UserController@setThemeSession");
 
 /*
 | This is for the survey-related routes

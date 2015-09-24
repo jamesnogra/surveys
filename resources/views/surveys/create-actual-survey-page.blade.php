@@ -58,6 +58,7 @@
 						<button id="add-question-button" class="w3-btn w3-{{ $color1 }}"><i class="material-icons w3-large">+</i> Add Question</button>
 						<button id="save-survey-questions-choices-db" class="w3-btn"><i class="material-icons w3-small">save</i> Save</button>
 						<button id="generate-link-code-db" class="w3-btn"><i class="material-icons w3-small">link</i> Generate Link</button> <input type="text" readonly id="old-link-input-field" value="{{ URL::to('/') . "/surveys/answer-survey-page/" . $survey->title . "/" . $survey->link_code}}" />
+						<p><a class="w3-btn w3-{{ $color1 }}" href="/users/change-theme-page/survey/{{ $survey_id }}">Change Theme</a></p>
 						<div id="has-responses" class="w3-container w3-red" style="margin-top:10px;">This survey has been answered by a couple of respondents. If you edit this, all of those responses will be cleared.</div>
 					</div>
 				</div>

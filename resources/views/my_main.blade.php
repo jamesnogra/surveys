@@ -9,6 +9,7 @@
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="icon" type="image/png" href="/images/logo/default.png">
 		<style>
 			.error_messages {
 				color: red;

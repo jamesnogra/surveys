@@ -9,9 +9,9 @@
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
 		<div style="float:left;">
-			<h4>
+			<h3>
 				Login
-			</h4>
+			</h3>
 		</div>
 		<h4 style="float:right;">
 			<a href="/" class="w3-btn">

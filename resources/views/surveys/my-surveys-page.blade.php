@@ -9,8 +9,8 @@
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
 		<div style="float:left;">
-			<h4>
-				My Surveys
+			<h3 style="float:left;">My Surveys</h3>
+			<h4 style="float:left;margin-left:10px;">
 				<a href="/surveys/create-survey-page" class="w3-btn">
 					<i class="material-icons w3-large">payment</i> New Survey
 				</a>
