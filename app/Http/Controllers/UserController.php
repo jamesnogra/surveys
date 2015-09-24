@@ -6,6 +6,8 @@
 	use DB;
 	use App\User;
 	use App\Http\Controllers\Controller;
+	use Illuminate\Support\Facades\Input;
+	use URL;
 	
 	class UserController extends Controller
 	{
@@ -111,10 +113,45 @@
 		 * @return None
 		 */
 		public function viewUserPage($name, $user_id) {
+			if (empty(session('email'))) {
+				return view("errors/unauthorized-page", ["color1"=>$this->color1]);
+			}
 			$user_id = Crypt::decrypt($user_id);
 			$user = DB::table('users')->where("user_id", $user_id)->first();
 			return view("users/view-user-page", ["user"=>$user, "color1"=>$this->color1]);
-		}	
+		}
+		
+		/**
+		 * uploads an profile image to user
+		 * 
+		 * @param image
+		 * @return Array
+		 */
+		public function uploadPicture() {
+			$user_id = Crypt::decrypt(session("user_id"));
+			if (!Input::hasFile('file')) {
+				return ["code"=>-1, "full_path"=>"", "file_name"=>"", "message"=>"Upload failed."];
+			}
+			$uploaddir = "images/profile/";
+			$new_file_info = $this->uploadImg('file', $uploaddir);
+			if (getimagesize($new_file_info["full_path"])) {
+				DB::table("users")->where("user_id", $user_id)->update(["picture"=>$new_file_info["file_name"]]);
+				return ["code"=>1, "full_path"=>$new_file_info["full_path"], "file_name"=>$new_file_info["file_name"], "message"=>"Uploaded successfully."];
+			} else {
+				return ["code"=>-1, "full_path"=>"", "file_name"=>"", "message"=>"Upload failed."];
+			}
+		}
+		public function uploadImg($fileField, $dirName) {
+			if (Input::hasFile($fileField)) {
+				$base_url = URL::to('/');
+				$time = md5(microtime());
+				$extension = Input::file($fileField)->getClientOriginalExtension();
+				$img_hash = $base_url . '/' . $dirName . $time . '.'. $extension;
+				Input::file($fileField)->move($dirName, $img_hash);
+				$file_name = $time . '.'. $extension;
+				return array("full_path"=>$img_hash, "file_name"=>$file_name);
+			}
+		}
 		
 	}
 

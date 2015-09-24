@@ -4,7 +4,7 @@
 <html>
 
 	<head>
-		<title>@yield('page-title') - Surveys</title>
+		<title>@yield('page-title') - jSurveys</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">

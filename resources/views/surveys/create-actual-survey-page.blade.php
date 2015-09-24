@@ -54,10 +54,11 @@
 						</form>
 					</div>
 					<hr>
-					<div class="w3-group" style=""> 
-						<button id="add-question-button" class="w3-btn w3-{{ $color1 }}">Add Question</button>
-						<button id="save-survey-questions-choices-db" class="w3-btn">Save</button>
-						<button id="generate-link-code-db" class="w3-btn">Generate Link</button>
+					<div class="w3-group"> 
+						<button id="add-question-button" class="w3-btn w3-{{ $color1 }}"><i class="material-icons w3-large">+</i> Add Question</button>
+						<button id="save-survey-questions-choices-db" class="w3-btn"><i class="material-icons w3-small">save</i> Save</button>
+						<button id="generate-link-code-db" class="w3-btn"><i class="material-icons w3-small">link</i> Generate Link</button> <input type="text" readonly id="old-link-input-field" value="{{ URL::to('/') . "/surveys/answer-survey-page/" . $survey->title . "/" . $survey->link_code}}" />
+						<div id="has-responses" class="w3-container w3-red" style="margin-top:10px;">This survey has been answered by a couple of respondents. If you edit this, all of those responses will be cleared.</div>
 					</div>
 				</div>
 				<div class="w3-group" id="questions-container"></div>
@@ -66,12 +67,23 @@
 			<div class="w3-col l2">&nbsp;</div>
 		</div>
 	</div>
+	
+	<style>html,body{ height:100%; }</style>
+	<div id="white-full-screen" style="top:0;left:0;width:100%;height:100%;background-color:white;position:fixed;opacity:0.9;"></div>
+	<div id="link-box" class="w3-card-4" style="width:350px;height:120px;position:fixed;left:50%;top:50%;background-color:#FFFFFF;margin:-60px 0px 0px -175px;">
+		<header class="w3-container w3-{{ $color1 }}">
+			<h4 style="float:left;">Links</h4>
+			<h4 style="float:right;cursor:pointer;" onClick="closeLinkBox();"><i class="material-icons w3-large">close</i></h4>
+		</header>
+		<h5 style="padding:5px;text-align:center;">
+			Direct Link: <input type="text" readonly id="link-input-field" />
+		</h5>
+	</div>
 @endsection
 
 
 @section('jquery-scripts')
 	<script>
-	
 	
 		function Question(question_id, question_text, question_type)  {
 			this.question_id = question_id;
@@ -90,6 +102,8 @@
 			
 			beforeLoading();
 			getQuestionsChoices();
+			closeLinkBox();
+			checkResponses();
 			function getQuestionsChoices() {
 				var _token = $("#_token").val();
 				var survey_id = $("#survey_id").val();
@@ -150,7 +164,12 @@
 				if (confirm("Are you sure to create new link for this survey? The old one will be deleted.")) {
 					$("#generate-link-code-db").hide();
 					$.post("/surveys/generate-link-code-db", {"survey_id":survey_id, "_token":_token}, function(data){
+						//data = JSON.parse(data);
 						$("#generate-link-code-db").show();
+						if (data["code"] == 1) {
+							$("#link-input-field").val(data["link"]);
+							openLinkBox();
+						}
 					});
 				}
 			});
@@ -196,6 +215,27 @@
 			
 		});
 		
+		
+		function closeLinkBox() {
+			$("#white-full-screen").fadeOut("fast");
+			$("#link-box").fadeOut("fast");
+		}
+		function openLinkBox() {
+			$("#white-full-screen").fadeIn("fast");
+			$("#link-box").fadeIn("fast");
+		}
+		
+		function checkResponses() {
+			var _token = $("#_token").val();
+			var survey_id = $("#survey_id").val();
+			$("#has-responses").hide();
+			$.post("/surveys/check-responses-db", {"survey_id":survey_id, "_token":_token}, function(data){
+				data = JSON.parse(data);
+				if (data.length > 0) {
+					$("#has-responses").show();
+				}
+			});
+		}
 		
 		//this template already contains the card container, only the contents of this will be replaced when question type is changed
 		function addTextOnlyTemplate(q, question_text) {

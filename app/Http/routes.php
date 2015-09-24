@@ -26,6 +26,7 @@ Route::get("/users/logout", "UserController@logout");
 Route::get("/users/view-user-page/{name}/{user_id}", "UserController@viewUserPage");
 Route::get("/users/add-user-page", "UserController@addUserPage");
 Route::post("/users/add-user-db", "UserController@addUserDB");
+Route::post("/users/upload-picture", "UserController@uploadPicture");
 
 /*
 | This is for the survey-related routes
@@ -40,3 +41,11 @@ Route::post("/surveys/save-survey-questions-choices-db", "SurveyController@saveS
 Route::post("/surveys/delete-survey-db", "SurveyController@deleteSurveyDB");
 Route::post("/surveys/get-questions-choices-db", "SurveyController@getQuestionsChoicesDB");
 Route::post("/surveys/generate-link-code-db", "SurveyController@generateLinkCodeDB");
+Route::get("/surveys/answer-survey-page/{title}/{link_code}", "SurveyController@answerSurveyPage");
+Route::post("/surveys/check-responses-db", "SurveyController@checkResponsesDB");
+Route::post("/surveys/save-responses-db", "SurveyController@saveResponsesDB");
+
+/*
+| This is for the other routes
+ */
+Route::get("/surveys/select-theme-page", "OtherController@selectThemePage");

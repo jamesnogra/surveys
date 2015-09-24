@@ -32,6 +32,16 @@
 		}
 		
 		/**
+		 * Gets a survey using link_id
+			*
+		 * @param  link_id
+		 * @return Response
+		 */
+		public function getSurveyByLinkId($link_code) {
+			return DB::table('surveys')->where("link_code", $link_code)->first();
+		}
+		
+		/**
 		 * Lists all the surveys of the logged in user
 		 *
 		 * @param  None
@@ -143,7 +153,7 @@
 		public function saveSurveyQuestionsChoicesDB() {
 			$questions_choices = json_decode($_POST["questions_choices"]);
 			$survey_id = Crypt::decrypt($_POST["survey_id"]);
-			$this->deleteQuestionsAndChoices($survey_id);
+			$this->deleteQuestionsAndChoicesAndResponses($survey_id);
 			$question_num = 1;
 			foreach($questions_choices as $item) {
 				$new_question = ["survey_id"=>$survey_id, "question_text"=>$item->question_text, "question_type"=>$item->question_type, "question_num"=>$question_num];
@@ -190,7 +200,7 @@
 		public function deleteSurveyDB() {
 			$survey_id = Crypt::decrypt($_POST["survey_id"]);
 			DB::table('surveys')->where("survey_id", $survey_id)->delete();
-			$this->deleteQuestionsAndChoices($survey_id);
+			$this->deleteQuestionsAndChoicesAndResponses($survey_id);
 		}
 		
 		/**
@@ -199,9 +209,10 @@
 		 * @param  survey_id
 		 * @return None
 		 */
-		public function deleteQuestionsAndChoices($survey_id) {
+		public function deleteQuestionsAndChoicesAndResponses($survey_id) {
 			DB::table('questions')->where("survey_id", $survey_id)->delete();
 			DB::table('choices')->where("survey_id", $survey_id)->delete();
+			DB::table('responses')->where("survey_id", $survey_id)->delete();
 		}
 		
 		/**
@@ -214,9 +225,60 @@
 			$survey_id = Crypt::decrypt($_POST["survey_id"]);
 			$survey_info = $this->getSurveyByID($survey_id);
 			$link_id = str_random(16);
-			$link = URL::to('/') . "/" . urlencode($survey_info->title) . "?id=" . $link_id;
+			$link = URL::to('/') . "/surveys/answer-survey-page/" . urlencode($survey_info->title) . "/" . $link_id;
 			DB::table("surveys")->where("survey_id", $survey_id)->update(["link_code"=>$link_id]);
 			return ["code"=>1, "link"=>$link];
+		}
+		
+		/**
+		 * answering survey page
+		 * 
+		 * @param  link_id
+		 * @return None
+		 */
+		function answerSurveyPage($title, $link_code) {
+			$survey_info = $this->getSurveyByLinkId($link_code);
+			return view("surveys/answer-survey-page", ["color1"=>$this->color1, "survey"=>$survey_info]);
+		}
+		
+		/**
+		 * saving of responses
+		 * 
+		 * @param  survey_id and reponses array
+		 * @return None
+		 */
+		function saveResponsesDB() {
+			$questions_choices = json_decode($_POST["responses"]);
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			$unique_respondent_id = str_random(64);
+			$ip_address = $_SERVER['REMOTE_ADDR'];
+			foreach($questions_choices as $question) {
+				$question_id = $question->question_id;
+				foreach($question->answers as $response_id) {
+					$new_response = [	"unique_respondent_id"		=> $unique_respondent_id, 
+										"ip_address"				=> $ip_address, 
+										"survey_id"					=> $survey_id,
+										"question_id"				=> $question_id,
+										"answer"					=> $response_id,
+										"date"						=> DB::raw("NOW()")	];
+					if (strlen($response_id)>0) {
+						DB::table('responses')->insertGetId($new_response);
+					}
+				}
+			}
+			return ["code"=>1, "message"=>"Success"];
+		}
+		
+		/**
+		 * checks if there's already respondents in a particular survey
+		 * 
+		 * @param  survey_id
+		 * @return Array
+		 */
+		function checkResponsesDB() {
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			$responses = DB::table('responses')->where("survey_id", $survey_id)->get();
+			return json_encode($responses);
 		}
 		
 		/**
@@ -226,7 +288,6 @@
 		 * @return Response
 		 */
 		public function uploadLogo() {
-			$user = new User();
 			if (!Input::hasFile('file')) {
 				return ["code"=>-1, "full_path"=>"", "file_name"=>"", "message"=>"Upload failed."];
 			}
