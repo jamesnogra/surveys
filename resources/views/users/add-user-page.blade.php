@@ -83,6 +83,10 @@
 							$("#the_email_error").html("This email address is already registered.");
 							$('#add-user-form').show();
 							$('#loading-form').hide();
+						}  else if (data["code"] == -2) {
+							$("#the_email_error").html("Please wait while we process your previous registration.");
+							$('#add-user-form').show();
+							$('#loading-form').hide();
 						} else {
 							$("#the_name_error").html("Something is wrong. Please try again later.");
 							$('#add-user-form').show();

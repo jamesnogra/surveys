@@ -43,7 +43,7 @@
 						<div class="survey-container" style="width:100%;">
 							<div class="survey-logo" style="float:left;width:100px;height:100px;overflow:hidden;margin-right:10px;"><img src="/images/logo/{{ $survey->logo }}" height="100px" width="100px" /></div>
 							<div style="float:left;width:65%;">
-								<div style="margin-top:10px;font-size:28px;overflow:hidden;">{{ $survey->title }}</div>
+								<div style="margin-top:10px;font-size:18px;overflow:hidden;">{{ $survey->title }}</div>
 								<div style="overflow:hidden;"><a class="w3-btn" href="/surveys/create-actual-survey-page/{{ urlencode($survey->title) }}/{{ Crypt::encrypt($survey->survey_id) }}">Edit</a></div>
 							</div>
 							<div style="width:1px;height:10px;clear:both;"></div>

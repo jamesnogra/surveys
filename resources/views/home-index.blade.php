@@ -18,6 +18,7 @@
 		</div>
 		<h4 style="float:right;">
 			<?php
+				echo '<a href="/users/change-theme-page/home/" class="w3-btn"><i class="material-icons w3-large">invert_colors</i> Theme</a> ';
 				if (session("user_id") !== null) {
 					echo '<a href="/users/view-user-page/'.urlencode(Crypt::decrypt(session("name"))).'/'.session("user_id").'" class="w3-btn"><i class="material-icons w3-large">home</i> My Profile</a> ';
 					echo '<a href="/users/logout" class="w3-btn"><i class="material-icons w3-large">arrow_forward</i> Logout</a> ';
@@ -42,7 +43,7 @@
 					<h4>Create</h4>
 				</header>
 				<div class="w3-container">
-					<p><i class="material-icons" style="font-size:128px;">border_color</i></p>
+					<p><i class="material-icons w3-text-{{ $color1 }}" style="font-size:128px;">border_color</i></p>
 					<p>Create surveys from various question types and templates. You can even upload your own company or organization logo in your surveys!</p>
 				</div>
 			</div>			
@@ -53,7 +54,7 @@
 					<h4>Publish</h4>
 				</header>
 				<div class="w3-container">
-					<p><i class="material-icons" style="font-size:128px;">cloud_upload</i></p>
+					<p><i class="material-icons w3-text-{{ $color1 }}" style="font-size:128px;">cloud_upload</i></p>
 					<p>Publish your survey so everyone can respond to it. You can have it password protected so that only invited respondents can answer it.</p>
 				</div>
 			</div>			
@@ -64,7 +65,7 @@
 					<h4>View Results</h4>
 				</header>
 				<div class="w3-container">
-					<p><i class="material-icons" style="font-size:128px;">assignment_turned_in</i></p>
+					<p><i class="material-icons w3-text-{{ $color1 }}" style="font-size:128px;">assignment_turned_in</i></p>
 					<p>View the results of your surveys. Whether you have hundereds, thousands, or even millions of respondents, we will graph the results for you instantly.</p>
 				</div>
 			</div>

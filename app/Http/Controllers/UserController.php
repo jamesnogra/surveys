@@ -103,6 +103,13 @@
 		 * @return None
 		 */
 		public function addUserDB() {
+			if (session("record_time") !== null) {
+				$last_registered_time = Crypt::decrypt(session("record_time"));
+				if (time()-$last_registered_time < 60) { //check if this user registered many times within a minute
+					$result = array("code"=>-2, "new_user_id"=>"", "message"=>"You registered like few minutes ago.");
+					return json_encode($result);
+				}
+			}
 			$user = DB::table('users')->where("email", $_POST["the_email"])->get();
 			if (empty($user)) {
 				$new_user_id = DB::table('users')->insertGetId(
@@ -113,6 +120,7 @@
 					"picture" => "default.jpg"]
 				);
 				$result = array("code"=>1, "new_user_id"=>Crypt::encrypt($new_user_id));
+				session(["record_time"=>Crypt::encrypt(time())]); //let's record when this PC last registered
 				return json_encode($result);
 			} else {
 				$result = array("code"=>-1, "new_user_id"=>"");
@@ -155,6 +163,9 @@
 			} else if ($page == "survey") {
 				$survey_id = Crypt::decrypt($_POST["survey_id"]);
 				DB::table("surveys")->where("survey_id", $survey_id)->update(["theme"=>$color1]);
+				return ["code"=>1, "message"=>"Survey theme has been changed to " . $color1 . "."];
+			} else if ($page == "home") {
+				session(["color1"=>$color1]);
 				return ["code"=>1, "message"=>"Survey theme has been changed to " . $color1 . "."];
 			}
 		}
