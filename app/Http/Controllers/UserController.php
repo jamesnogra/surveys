@@ -8,6 +8,7 @@
 	use App\Http\Controllers\Controller;
 	use Illuminate\Support\Facades\Input;
 	use URL;
+	use Illuminate\Routing\Redirector;
 	
 	class UserController extends Controller
 	{
@@ -20,6 +21,16 @@
 			if (!empty(session("color1"))) {
 				$this->color1 = session("color1");
 			}
+		}
+		
+		/**
+		 * Main homepage
+		 *
+		 * @param  None
+		 * @return None
+		 */
+		public function homeIndex() {
+			return view("home-index", ["color1"=>$this->color1]);
 		}
 		
 		/**
@@ -72,6 +83,7 @@
 		 */
 		public function logout() {
 			session()->flush();
+			return redirect()->action('UserController@homeIndex');
 		}
 		
 		/**

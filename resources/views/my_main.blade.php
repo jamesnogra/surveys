@@ -11,6 +11,9 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="icon" type="image/png" href="/images/logo/default.png">
 		<style>
+			html, body {
+				height: 100%;
+			}
 			.error_messages {
 				color: red;
 				padding: 5px;
@@ -31,7 +34,15 @@
 	</head>
 
 	<body>
-		@yield('content')
+		<div style="min-height:100%;margin:0 auto -120px;">
+			@yield('content')
+			<div style="height:170px;width:100%;"></div>
+		</div>
+		<footer class="w3-container w3-{{ $color1 }}" style="height:120px;padding-top:35px;width:100%;">
+			<img src="/images/logo/default.png" width="40px" style="float:left;padding-top:5px;"/>
+			<h4 style="float:left;margin-left:10px;">jSurveys</h4>
+			<small style="float:right;padding-top:20px;">Copyright 2015</small>
+		</footer>
 	</body>
 
 </html>

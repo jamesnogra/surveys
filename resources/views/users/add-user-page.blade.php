@@ -9,7 +9,7 @@
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
 		<h3 style="float:left;">Sign Up</h3>
-		<h4 style="float:right;"><a class="w3-btn" href="/users/login-user-page">Login</a></h4>
+		<h4 style="float:right;"><a class="w3-btn" href="/users/login-user-page"><i class="material-icons w3-large">lock</i> Login</a></h4>
 	</header>
 	<div class="w3-row">
 		<div class="w3-col l3">&nbsp;</div>
@@ -78,14 +78,16 @@
 					$.post("/users/add-user-db", {"the_email":the_email, "the_password":the_password, "the_name":the_name, "_token":_token}, function(data){
 						data = JSON.parse(data);
 						if (data["code"] == 1) {
-							window.location = "/users/view-user-page/" + the_name.replace(/[^a-zA-Z ]/g, "") + "/" + data["new_user_id"];
+							window.location = "/users/login-user-page";
 						} else if (data["code"] == -1) {
 							$("#the_email_error").html("This email address is already registered.");
+							$('#add-user-form').show();
+							$('#loading-form').hide();
 						} else {
 							$("#the_name_error").html("Something is wrong. Please try again later.");
+							$('#add-user-form').show();
+							$('#loading-form').hide();
 						}
-						$('#add-user-form').show();
-						$('#loading-form').hide();
 					}).fail(function(error){
 						$("#the_name_error").html("Something is wrong. Please try again later.");
 					});
