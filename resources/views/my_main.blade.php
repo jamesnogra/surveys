@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="icon" type="image/png" href="/images/logo/default.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<style>
 			html, body {
 				height: 100%;
@@ -39,7 +40,7 @@
 			<div style="height:170px;width:100%;"></div>
 		</div>
 		<footer class="w3-container w3-{{ $color1 }}" style="height:120px;padding-top:35px;width:100%;">
-			<img src="/images/logo/default.png" width="40px" style="float:left;padding-top:5px;"/>
+			<img src="/images/logo/default.png" width="40" style="float:left;padding-top:5px;"/>
 			<h4 style="float:left;margin-left:10px;">jSurveys</h4>
 			<small style="float:right;padding-top:20px;">Copyright 2015</small>
 		</footer>

@@ -32,9 +32,9 @@
 	</header>
 	<div style="width:100%;height:20px;clear:both;"></div>
 	<div id="my_slideshow" style="width:800px;height:300px;margin:0 auto;overflow:hidden;">
-		<img id="slideshow_image_1" src="/images/slideshow/1.JPG" width="800px" class="slideshow_images" />
-		<img id="slideshow_image_2" src="/images/slideshow/2.JPG" width="800px" class="slideshow_images" />
-		<img id="slideshow_image_3" src="/images/slideshow/3.JPG" width="800px" class="slideshow_images" />
+		<img id="slideshow_image_1" src="/images/slideshow/1.JPG" width="800" alt="Create Survey" class="slideshow_images" />
+		<img id="slideshow_image_2" src="/images/slideshow/2.JPG" width="800" alt="Publish Survey" class="slideshow_images" />
+		<img id="slideshow_image_3" src="/images/slideshow/3.JPG" width="800" alt="View Survey Results" class="slideshow_images" />
 	</div>
 	<div style="width:100%;height:20px;clear:both;"></div>
 	<div style="text-align:center;max-width:832px;margin:0 auto;">
@@ -45,7 +45,7 @@
 				</header>
 				<div class="w3-container">
 					<p><i class="material-icons" style="font-size:128px;">border_color</i></p>
-					<p>Create surveys from various question types and templates.</p>
+					<p>Create surveys from various question types and templates. You can even upload your own company or organization logo in your surveys!</p>
 				</div>
 			</div>			
 		</div>
@@ -56,7 +56,7 @@
 				</header>
 				<div class="w3-container">
 					<p><i class="material-icons" style="font-size:128px;">cloud_upload</i></p>
-					<p>Publish your surveys so everyone can respond to it.</p>
+					<p>Publish your survey so everyone can respond to it. You can have it password protected so that only invited respondents can answer it.</p>
 				</div>
 			</div>			
 		</div>
@@ -67,7 +67,7 @@
 				</header>
 				<div class="w3-container">
 					<p><i class="material-icons" style="font-size:128px;">assignment_turned_in</i></p>
-					<p>View the results of your surveys.</p>
+					<p>View the results of your surveys. Whether you have hundereds, thousands, or even millions of respondents, we will graph the results for you instantly.</p>
 				</div>
 			</div>
 		</div>
@@ -78,11 +78,11 @@
 	</div>
 	<div style="width:100%;height:40px;clear:both;"></div>
 	<div style="text-align:center;max-width:832px;margin:0 auto;height:50px;opacity:0.5;">
-		<img src="/images/company-logos/laravel-logo.png" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/jquery-logo.gif" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/html-5-logo.png" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/mysql-logo.png" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/w3-schools-logo.png" height="100%" style="margin:10px;" />
+		<img src="/images/company-logos/laravel-logo.png" alt="Laravel Logo" height="100%" style="margin:10px;" />
+		<img src="/images/company-logos/jquery-logo.gif" alt="jQuery Logo" height="100%" style="margin:10px;" />
+		<img src="/images/company-logos/html-5-logo.png" alt="HTML5 Logo" height="100%" style="margin:10px;" />
+		<img src="/images/company-logos/mysql-logo.png" alt="MySQL Logo" height="100%" style="margin:10px;" />
+		<img src="/images/company-logos/w3-schools-logo.png" alt="W3Schools Logo" height="100%" style="margin:10px;" />
 	</div>
 @endsection
 
