@@ -8,15 +8,13 @@
 
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
-		<div style="float:left;">
-			<h5>
-				<nav class="w3-topnav">
-					<a href="/"><i class="material-icons w3-large">home</i> Home</a>
-					<a href="/example"><i class="material-icons w3-large">book</i> Example</a>
-					<a href="/contact-us"><i class="material-icons w3-large">phone</i> Contact Us</a>
-					<a href="/about"><i class="material-icons w3-large">info</i> About</a>
-				</nav>
-			</h5>
+		<div style="float:left;font-size:18px;padding-top:10px;">
+			<nav class="w3-topnav">
+				<a href="/"><i class="material-icons w3-large">home</i> Home</a>
+				<a href="/example"><i class="material-icons w3-large">book</i> Example</a>
+				<a href="/contact-us"><i class="material-icons w3-large">phone</i> Contact Us</a>
+				<a href="/about"><i class="material-icons w3-large">info</i> About</a>
+			</nav>
 		</div>
 		<h4 style="float:right;">
 			<?php
@@ -78,11 +76,11 @@
 	</div>
 	<div style="width:100%;height:40px;clear:both;"></div>
 	<div style="text-align:center;max-width:832px;margin:0 auto;height:50px;opacity:0.5;">
-		<img src="/images/company-logos/laravel-logo.png" alt="Laravel Logo" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/jquery-logo.gif" alt="jQuery Logo" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/html-5-logo.png" alt="HTML5 Logo" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/mysql-logo.png" alt="MySQL Logo" height="100%" style="margin:10px;" />
-		<img src="/images/company-logos/w3-schools-logo.png" alt="W3Schools Logo" height="100%" style="margin:10px;" />
+		<img src="/images/company-logos/laravel-logo.png" alt="Laravel Logo" height="50" style="margin:10px;" />
+		<img src="/images/company-logos/jquery-logo.gif" alt="jQuery Logo" height="50" style="margin:10px;" />
+		<img src="/images/company-logos/html-5-logo.png" alt="HTML5 Logo" height="50" style="margin:10px;" />
+		<img src="/images/company-logos/mysql-logo.png" alt="MySQL Logo" height="50" style="margin:10px;" />
+		<img src="/images/company-logos/w3-schools-logo.png" alt="W3Schools Logo" height="50" style="margin:10px;" />
 	</div>
 @endsection
 
