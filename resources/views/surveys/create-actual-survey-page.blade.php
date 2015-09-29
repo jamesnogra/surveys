@@ -55,13 +55,20 @@
 					</div>
 					<hr>
 					<div class="w3-group"> 
+						<p>
+							<button id="generate-link-code-db" class="w3-btn"><i class="material-icons w3-small">link</i> Generate New Link</button> 
+							<input style="width:400px;" type="text" readonly id="old-link-input-field" value="{{ URL::to('/') . '/surveys/answer-survey-page/' . $survey->title . '/' . $survey->link_code}}" />
+							<a class="w3-btn" target="_blank" href="{{ URL::to('/') . '/surveys/answer-survey-page/' . $survey->title . '/' . $survey->link_code}}"><i class="material-icons w3-small">pageview</i> Preview</a>
+						</p>
+						<hr>
 						<button id="add-question-button" class="w3-btn w3-{{ $color1 }}"><i class="material-icons w3-large">+</i> Add Question</button>
 						<button id="save-survey-questions-choices-db" class="w3-btn"><i class="material-icons w3-small">save</i> Save</button>
-						<button id="generate-link-code-db" class="w3-btn"><i class="material-icons w3-small">link</i> Generate Link</button> <input type="text" readonly id="old-link-input-field" value="{{ URL::to('/') . "/surveys/answer-survey-page/" . $survey->title . "/" . $survey->link_code}}" />
-						<p><a class="w3-btn w3-{{ $color1 }}" href="/users/change-theme-page/survey/{{ $survey_id }}">Change Theme</a></p>
+						<a class="w3-btn" href="/users/change-theme-page/survey/{{ $survey_id }}"><i class="material-icons w3-small">invert_colors</i> Change Theme</a>
+						<a class="w3-btn" href="/users/change-theme-page/survey/{{urlencode($survey->title)}}/{{ $survey_id }}"><i class="material-icons w3-small">trending_up</i> Show Results</a>
 						<div id="has-responses" class="w3-container w3-red" style="margin-top:10px;">This survey has been answered by a couple of respondents. If you edit this, all of those responses will be cleared.</div>
 					</div>
 				</div>
+				<hr>
 				<div class="w3-group" id="questions-container"></div>
 				<div class="w3-container" id="loading-form" style="text-align:center;"><i class="material-icons w3-xxxlarge w3-spin">refresh</i></div>
 			</div>
@@ -99,6 +106,7 @@
 		var all_questions = [];
 		
 	
+		var survey_theme = "indigo";
 		$(document).ready(function() {
 			
 			beforeLoading();
@@ -108,8 +116,10 @@
 			function getQuestionsChoices() {
 				var _token = $("#_token").val();
 				var survey_id = $("#survey_id").val();
-				$.post("/surveys/get-questions-choices-db", {"survey_id":survey_id, "_token":_token}, function(data){
-					data = JSON.parse(data);
+				$.post("/surveys/get-questions-choices-db", {"survey_id":survey_id, "_token":_token}, function(all){
+					all = JSON.parse(all);
+					data = all["questions_choices"];
+					setSurveyTheme(all["theme"]);
 					if (data.length > 0) {
 						var x, y;
 						var temp_array = [];
@@ -126,6 +136,12 @@
 					}
 					afterLoading();
 				});
+			}
+			
+			function setSurveyTheme(color) {
+				if (color != "default") {
+					survey_theme = color;
+				}
 			}
 			
 			function beforeLoading() {
@@ -242,7 +258,7 @@
 		function addTextOnlyTemplate(q, question_text) {
 			var temp_str = "";
 			temp_str += '<div class="w3-card-4" style="width:100%;margin-bottom:20px;" id="question-container-'+q+'"> 						\
-							<header class="w3-container w3-{{ $color1 }}">																\
+							<header class="w3-container w3-'+survey_theme+'">																\
 								<h5 style="float:left;">																					\
 									<div style="margin-right:20px;float:left;">Question Number: '+addQuestionNumbersDropDown(q)+'</div>												\
 									<div style="margin-right:20px;float:left;">Question Type: '+addQuestionTypeDropDown(q)+'</div>										\
@@ -311,7 +327,7 @@
 					temp_str += '</label><br>';
 				temp_str += '</div>';
 				temp_str += '<div class="w3-group">';
-					temp_str += '<button onClick="addAnotherSingleAnswerResponse('+q+');" class="w3-btn w3-{{ $color1 }}">Add Another Answer</button>';
+					temp_str += '<button onClick="addAnotherSingleAnswerResponse('+q+');" class="w3-btn w3-'+survey_theme+'">Add Another Answer</button>';
 				temp_str += '</div>';
 			temp_str += '</div>';
 			return temp_str;
@@ -353,7 +369,7 @@
 					temp_str += '</label><br>';
 				temp_str += '</div>';
 				temp_str += '<div class="w3-group">';
-					temp_str += '<button onClick="addAnotherMultipleAnswerResponse('+q+');" class="w3-btn w3-{{ $color1 }}">Add Another Answer</button>';
+					temp_str += '<button onClick="addAnotherMultipleAnswerResponse('+q+');" class="w3-btn w3-'+survey_theme+'">Add Another Answer</button>';
 				temp_str += '</div>';
 			temp_str += '</div>';
 			return temp_str;

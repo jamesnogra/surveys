@@ -15,6 +15,7 @@
 			</a>
 		</h4>
 		<h4 style="float:right;">
+			<a class="w3-btn" href="/"><i class="material-icons w3-large">home</i> Home</a>
 			<a href="/users/logout" class="w3-btn">
 				<i class="material-icons w3-large">arrow_forward</i> Logout
 			</a>

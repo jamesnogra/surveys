@@ -15,9 +15,9 @@
 			<input type="hidden" id="unique_respondent_id" name="unique_respondent_id" value="{{ $unique_respondent_id }}" />
 		</div>
 		<h4 style="float:right;">
-			<a href="" class="w3-btn">
+			<!--<a href="" class="w3-btn">
 				<i class="material-icons w3-large">email</i> Email
-			</a>
+			</a>-->
 		</h4>
 	</header>
 	<div class="w3-container">&nbsp;</div>
@@ -33,6 +33,17 @@
 		</div>
 		<div class="w3-col l2">&nbsp;</div>
 	</div>
+	<div id="white-full-screen" style="top:0;left:0;width:100%;height:100%;background-color:white;position:fixed;"></div>
+	<div id="password-box" class="w3-card-4" style="width:350px;position:fixed;left:50%;top:50%;background-color:#FFFFFF;margin:-85px 0px 0px -175px;">
+		<header class="w3-container w3-{{ $color1 }}">
+			<h4 style="text-align:center;">Password</h4>
+		</header>
+		<h5 style="padding:5px;text-align:center;">
+			<input type="password" id="my-password" />
+			<div id="password-error-message" class="error_messages"></div>
+			<div><button class="w3-btn" id="ok-button" onClick="submitPassword();">OK</button></div>
+		</h5>
+	</div>
 @endsection
 
 
@@ -44,17 +55,23 @@
 			this.question_id = question_id;
 			this.answers = [];
 		}
+		
+		var password_ok = true;
+		var loading_rotate = '<i style="color:#000000;" class="material-icons w3-xxxlarge w3-spin">refresh</i>';
 
 		var at=1, total, questions_choices, responses = [];
 		$(document).ready(function() {
+			$("#white-full-screen").hide();
+			$("#password-box").hide();
 			$("#back-button").hide();
 			$("#next-button").hide();
 			$("#submit-button").hide();
 			var survey_id = "{{ Crypt::encrypt($survey->survey_id)}}";
 			var _token = $("#_token").val();
 			var x;
-			$.post("/surveys/get-questions-choices-db", {"survey_id":survey_id, "_token":_token}, function(data){
-				data = JSON.parse(data);
+			$.post("/surveys/get-questions-choices-db", {"survey_id":survey_id, "_token":_token}, function(all){
+				all = JSON.parse(all);
+				data = all["questions_choices"];
 				questions_choices = data;
 				total = data.length;
 				var html_to_add;
@@ -77,9 +94,33 @@
 					prepareButtons();
 					$(".question-container").hide();
 					$("#card-num-"+at).show();
+					if (all["password"].length > 0) {
+						$("#white-full-screen").show();
+						$("#password-box").show();
+					}
 				}
 			});
 		});
+		
+		function submitPassword() {
+			var my_password = $("#my-password").val();
+			var survey_id = "{{ Crypt::encrypt($survey->survey_id)}}";
+			var _token = $("#_token").val();
+			$("#password-error-message").html(loading_rotate);
+			$("#ok-button").hide();
+			$.post("/surveys/fill-password-db", {"survey_id":survey_id, "_token":_token, "my_password":my_password}, function(data){
+				if (data["code"] == 1) {
+					$("#white-full-screen").fadeOut();
+					$("#password-box").fadeOut();
+					$("#password-error-message").html("");
+					password_ok = true;
+				} else {
+					$("#password-error-message").html("Password is incorrect.");
+					$("#ok-button").show();
+					password_ok = false;
+				}
+			});
+		}
 		
 		
 		function confirmSubmitAnswers() {
@@ -110,10 +151,13 @@
 					responses[x]["answers"] = [ $("#question-id-"+id).val() ];
 				}
 			}
-			//console.log(JSON.stringify(responses, null, 4));
-			$.post("/surveys/save-responses-db", {"survey_id":survey_id, "responses":JSON.stringify(responses), "_token":_token, "unique_respondent_id":unique_respondent_id}, function(data){
-				//do here
-			});
+			if (password_ok) {
+				$.post("/surveys/save-responses-db", {"survey_id":survey_id, "responses":JSON.stringify(responses), "_token":_token, "unique_respondent_id":unique_respondent_id}, function(data){
+					//do here
+				});
+			} else {
+				alert("You skipped the password.");
+			}
 		}
 		
 		

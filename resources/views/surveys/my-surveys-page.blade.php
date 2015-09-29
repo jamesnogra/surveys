@@ -17,6 +17,7 @@
 			</h4>
 		</div>
 		<h4 style="float:right;">
+			<a class="w3-btn" href="/"><i class="material-icons w3-large">home</i> Home</a>
 			<a href="/users/view-user-page/{{ urlencode($name) }}/{{ Crypt::encrypt($user_id) }}" class="w3-btn">
 				<i class="material-icons w3-large">person</i> My Profile
 			</a>
@@ -35,6 +36,7 @@
 					<header class="w3-container w3-{{ $color1 }}">
 						<h4 style="float:left;">{{ $survey->title }}</h4>
 						<h4 style="float:right;">
+							<i class="material-icons w3-large" style="cursor:pointer;" onClick="showResults('{{ urlencode($survey->title) }}', '{{ Crypt::encrypt($survey->survey_id) }}');">trending_up</i>
 							<i class="material-icons w3-large" style="cursor:pointer;" onClick="editSurvey('{{ urlencode($survey->title) }}', '{{ Crypt::encrypt($survey->survey_id) }}');">edit</i>
 							<i class="material-icons w3-large" style="cursor:pointer;" onClick="deleteSurveyDB('{{ Crypt::encrypt($survey->survey_id) }}', {{ $x }});">delete</i>
 						</h4>
@@ -56,6 +58,10 @@
 
 		function editSurvey(title, survey_id) {
 			window.location = "/surveys/create-actual-survey-page/"+title+"/"+survey_id;
+		}
+		
+		function showResults(title, survey_id) {
+			window.location = "/surveys/show-survey-results-page/"+title+"/"+survey_id;
 		}
 		
 		function deleteSurveyDB(survey_id, id) {

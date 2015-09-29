@@ -89,7 +89,7 @@
 				$logo = "default.png";
 			}
 			if (strlen($_POST["the_password"]) > 0) {
-				$new_password = Crypt::encrypt($_POST["the_password"]);
+				$new_password = md5($_POST["the_password"]);
 			} else {
 				$new_password = "";
 			}
@@ -137,7 +137,8 @@
 			$field = $_POST["field"];
 			$value = $_POST["value"];
 			if ($field=="password") {
-				$value = Crypt::encrypt($value);
+				if (strlen($value) == 0) { $value = ""; }
+				else { $value = md5($value); }
 			}
 			DB::table("surveys")->where("survey_id", $survey_id)->update([$field=>$value]);
 			return json_encode(array("code"=>1, "message"=>$field." has been changed to ".$value."."));
@@ -190,7 +191,8 @@
 				$questions_choices[$x]->choices = DB::table('choices')->where("question_id", $question->question_id)->get();
 				$x++;
 			}
-			return json_encode($questions_choices);
+			$survey_info->questions_choices = $questions_choices;
+			return json_encode($survey_info);
 		}
 		
 		/**
@@ -286,6 +288,23 @@
 			$survey_id = Crypt::decrypt($_POST["survey_id"]);
 			$responses = DB::table('responses')->where("survey_id", $survey_id)->get();
 			return json_encode($responses);
+		}
+		
+		/**
+		 * matches the password for answering survey
+		 * 
+		 * @param  survey_id, password
+		 * @return Array
+		 */
+		public function fillPasswordDB() {
+			$survey_id = Crypt::decrypt($_POST["survey_id"]);
+			$my_password = md5($_POST["my_password"]);
+			$result = DB::table('surveys')->where("survey_id", $survey_id)->where("password", $my_password)->get();
+			if (count($result) > 0) {
+				return ["code"=>1, "message"=>"Password match."];
+			} else {
+				return ["code"=>-1, "message"=>"Password is incorrect."];
+			}
 		}
 		
 		/**

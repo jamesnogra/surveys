@@ -44,6 +44,7 @@ Route::post("/surveys/generate-link-code-db", "SurveyController@generateLinkCode
 Route::get("/surveys/answer-survey-page/{title}/{link_code}", "SurveyController@answerSurveyPage");
 Route::post("/surveys/check-responses-db", "SurveyController@checkResponsesDB");
 Route::post("/surveys/save-responses-db", "SurveyController@saveResponsesDB");
+Route::post("/surveys/fill-password-db", "SurveyController@fillPasswordDB");
 
 /*
 | This is for the other routes

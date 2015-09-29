@@ -9,7 +9,10 @@
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
 		<h3 style="float:left;">Sign Up</h3>
-		<h4 style="float:right;"><a class="w3-btn" href="/users/login-user-page"><i class="material-icons w3-large">lock</i> Login</a></h4>
+		<h4 style="float:right;">
+			<a class="w3-btn" href="/"><i class="material-icons w3-large">home</i> Home</a>
+			<a class="w3-btn" href="/users/login-user-page"><i class="material-icons w3-large">lock</i> Login</a>
+		</h4>
 	</header>
 	<div class="w3-row">
 		<div class="w3-col l3">&nbsp;</div>

@@ -11,6 +11,7 @@
 		<div style="float:left;font-size:18px;padding-top:10px;">
 			<nav class="w3-topnav">
 				<a href="/"><i class="material-icons w3-large">home</i> Home</a>
+				<a href="/"><i class="material-icons w3-large">find_in_page</i> Help</a>
 				<a href="/example"><i class="material-icons w3-large">book</i> Example</a>
 				<a href="/contact-us"><i class="material-icons w3-large">phone</i> Contact Us</a>
 				<a href="/about"><i class="material-icons w3-large">info</i> About</a>
@@ -100,6 +101,13 @@
 			$(".slideshow_images").hide();
 			$("#slideshow_image_"+count).fadeIn();
 			count++;
+		}
+		
+		function w3_open() {
+			document.getElementsByClassName("w3-sidenav")[0].style.display = "block";
+		}
+		function w3_close() {
+			document.getElementsByClassName("w3-sidenav")[0].style.display = "none";
 		}
 	</script>
 @endsection
