@@ -14,6 +14,7 @@
 			</a>
 		</h4>
 		<h4 style="float:right;">
+			<a class="w3-btn" href="/"><i class="material-icons w3-large">home</i> Home</a>
 			<a href="/users/view-user-page/{{ urlencode($name) }}/{{ Crypt::encrypt($user_id) }}" class="w3-btn">
 				<i class="material-icons w3-large">person</i> My Profile
 			</a>
@@ -64,7 +65,7 @@
 						<button id="add-question-button" class="w3-btn w3-{{ $color1 }}"><i class="material-icons w3-large">+</i> Add Question</button>
 						<button id="save-survey-questions-choices-db" class="w3-btn"><i class="material-icons w3-small">save</i> Save</button>
 						<a class="w3-btn" href="/users/change-theme-page/survey/{{ $survey_id }}"><i class="material-icons w3-small">invert_colors</i> Change Theme</a>
-						<a class="w3-btn" href="/users/change-theme-page/survey/{{urlencode($survey->title)}}/{{ $survey_id }}"><i class="material-icons w3-small">trending_up</i> Show Results</a>
+						<a class="w3-btn" href="/surveys/show-survey-results-page/{{urlencode($survey->title)}}/{{ $survey_id }}"><i class="material-icons w3-small">trending_up</i> Show Results</a>
 						<div id="has-responses" class="w3-container w3-red" style="margin-top:10px;">This survey has been answered by a couple of respondents. If you edit this, all of those responses will be cleared.</div>
 					</div>
 				</div>
@@ -156,6 +157,10 @@
 			}
 			
 			$("#save-survey-questions-choices-db").click(function() {
+				if (num_responses > 0) {
+					if (!confirm("Are you sure you want to save this survey again? All the responses will be cleared.")) { return; }
+					$("#has-responses").hide();
+				}
 				var _token = $("#_token").val();
 				var temp_array = JSON.stringify(all_questions);
 				var survey_id = $("#survey_id").val();
@@ -242,12 +247,14 @@
 			$("#link-box").fadeIn("fast");
 		}
 		
+		var num_responses = 0;
 		function checkResponses() {
 			var _token = $("#_token").val();
 			var survey_id = $("#survey_id").val();
 			$("#has-responses").hide();
 			$.post("/surveys/check-responses-db", {"survey_id":survey_id, "_token":_token}, function(data){
 				data = JSON.parse(data);
+				num_responses = data.length;
 				if (data.length > 0) {
 					$("#has-responses").show();
 				}

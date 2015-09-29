@@ -31,7 +31,7 @@
 		</h4>
 	</header>
 	<div style="width:100%;height:20px;clear:both;"></div>
-	<div id="my_slideshow" style="width:800px;height:300px;margin:0 auto;overflow:hidden;">
+	<div id="my_slideshow" style="max-width:800px;height:300px;margin:0 auto;overflow:hidden;">
 		<img id="slideshow_image_1" src="/images/slideshow/1.JPG" width="800" alt="Create Survey" class="slideshow_images" />
 		<img id="slideshow_image_2" src="/images/slideshow/2.JPG" width="800" alt="Publish Survey" class="slideshow_images" />
 		<img id="slideshow_image_3" src="/images/slideshow/3.JPG" width="800" alt="View Survey Results" class="slideshow_images" />
@@ -56,7 +56,7 @@
 				</header>
 				<div class="w3-container">
 					<p><i class="material-icons w3-text-{{ $color1 }}" style="font-size:128px;">cloud_upload</i></p>
-					<p>Publish your survey so everyone can respond to it. You can have it password protected so that only invited respondents can answer it.</p>
+					<p>Publish your survey so everyone can respond to it. You can have it password protected so that only invited respondents can answer.</p>
 				</div>
 			</div>			
 		</div>

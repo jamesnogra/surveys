@@ -307,6 +307,57 @@
 			}
 		}
 		
+		public function showSurveyResultsPage($title, $survey_id) {
+			$results = [];
+			$x = 0;
+			$survey_id = Crypt::decrypt($survey_id);
+			$survey_info = $this->getSurveyById($survey_id);
+			if ($survey_info->theme == "default") { $survey_info->theme = "indigo"; }
+			$questions = DB::table('questions')->where('survey_id', $survey_id)->get();
+			foreach($questions as $question) {
+				$results[$x] = $question;
+				if ($question->question_type == "SINGLE_ANSWER" || $question->question_type == "MULTIPLE_ANSWER") {
+					$results[$x]->responses = $this->getSingleMultipleAnswerResponses($question->question_id);
+				} else if ($question->question_type == "SINGLE_RESPONSE") {
+					$results[$x]->responses = $this->getSingleResponseResponses($question->question_id);
+				}
+				$x++;
+			}
+			return view("surveys/responses-survey-page", ["color1"=>$this->color1, "survey"=>$survey_info, "responses"=>$results]);
+		}
+		public function getSingleMultipleAnswerResponses($question_id) {
+			$responses = [];
+			$x = 0;
+			$choices = DB::table('choices')->where('question_id', $question_id)->get();
+			foreach($choices as $choice) {
+				$responses[$x] = $choice;
+				$responses[$x]->total = DB::table('responses')->where('answer', $choice->choice_id)->count();
+				$x++;
+			}
+			return $responses;
+		}
+		public function getSingleResponseResponses($question_id) {
+			$responses = [];
+			$temp_array = [];
+			$x = 0;
+			$responses_not_unique = DB::table('responses')->select('answer')->where('question_id', $question_id)->get();
+			foreach($responses_not_unique as $response) { $temp_array[] = $response->answer; }
+			$responses_unique = $this->uniqueSingleResponses($temp_array);
+			foreach ($responses_unique as $item) {
+				$responses[$x] = array();
+				$responses[$x]['answer'] = $item;
+				$responses[$x]['total'] = DB::table('responses')->where('answer', $item)->count();
+				$x++;
+			}
+			return $responses;
+		}
+		public function uniqueSingleResponses($array) {
+			return array_intersect_key(
+				$array,
+				array_unique(array_map("StrToLower",$array))
+			);
+		}
+		
 		/**
 		 * Upload logo for surveys
 			*
