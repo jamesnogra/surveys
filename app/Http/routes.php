@@ -12,6 +12,13 @@
 */
 
 Route::get("/", "UserController@homeIndex");
+Route::get("/help", function() {
+	return view("help-page");
+});
+Route::get("/about", function() {
+	return view("about-page");
+});
+Route::get("/example", "SurveyController@generateExample");
 
 
 /*

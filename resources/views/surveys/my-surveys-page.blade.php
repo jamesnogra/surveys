@@ -9,15 +9,15 @@
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
 		<div style="float:left;">
-			<h3 style="float:left;">My Surveys</h3>
-			<h4 style="float:left;margin-left:10px;">
-				<a href="/surveys/create-survey-page" class="w3-btn">
-					<i class="material-icons w3-large">payment</i> New Survey
-				</a>
-			</h4>
+			<nav class="w3-topnav">
+				<h4 style="float:left;">My Surveys</h4>
+				<h4 style="float:left;margin-left:10px;">
+					<a href="/"><i class="material-icons w3-large">home</i> Home</a>
+					<a href="/surveys/create-survey-page"><i class="material-icons w3-large">payment</i> New Survey</a>
+				</h4>
+			</nav>
 		</div>
 		<h4 style="float:right;">
-			<a class="w3-btn" href="/"><i class="material-icons w3-large">home</i> Home</a>
 			<a href="/users/view-user-page/{{ urlencode($name) }}/{{ Crypt::encrypt($user_id) }}" class="w3-btn">
 				<i class="material-icons w3-large">person</i> My Profile
 			</a>

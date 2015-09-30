@@ -8,13 +8,13 @@
 
 @section('content')
 	<header class="w3-container w3-{{ $color1 }}">
-		<h4 style="float:left;">
-			<a href="/surveys/my-surveys-page" class="w3-btn">
-				<i class="material-icons">payment</i> My Surveys
-			</a>
-		</h4>
+		<nav class="w3-topnav" style="float:left;">
+			<h4 style="float:left;">
+				<a href="/"><i class="material-icons w3-large">home</i> Home</a>
+				<a href="/surveys/my-surveys-page"><i class="material-icons w3-large">payment</i> My Surveys</a>
+			</h4>
+		</nav>
 		<h4 style="float:right;">
-			<a class="w3-btn" href="/"><i class="material-icons w3-large">home</i> Home</a>
 			<a href="/users/view-user-page/{{ urlencode($name) }}/{{ Crypt::encrypt($user_id) }}" class="w3-btn">
 				<i class="material-icons w3-large">person</i> My Profile
 			</a>

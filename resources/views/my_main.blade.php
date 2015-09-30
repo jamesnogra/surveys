@@ -42,7 +42,7 @@
 		<footer class="w3-container w3-{{ $color1 }}" style="height:120px;padding-top:35px;width:100%;">
 			<img src="/images/logo/default.png" width="40" alt="jSurveys Logo" style="float:left;padding-top:5px;"/>
 			<h4 style="float:left;margin-left:10px;">jSurveys</h4>
-			<small style="float:right;padding-top:20px;"><a href="/about">About</a> | <a href="/contact-us">Contact Us</a> | Copyright 2015</small>
+			<small style="float:right;padding-top:20px;"><a href="/about">About</a> | <a href="http://www.therookieblog.com/#four"">Contact Us</a> | Copyright 2015</small>
 		</footer>
 	</body>
 

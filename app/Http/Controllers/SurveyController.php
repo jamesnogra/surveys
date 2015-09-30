@@ -9,6 +9,7 @@
 	use App\Http\Controllers\Controller;
 	use Illuminate\Support\Facades\Input;
 	use URL;
+	use Illuminate\Routing\Redirector;
 	
 	class SurveyController extends Controller
 	{
@@ -356,6 +357,17 @@
 				$array,
 				array_unique(array_map("StrToLower",$array))
 			);
+		}
+		
+		/**
+		 * Generates a random survey for /example page
+		 *
+		 * @param  None
+		 * @return None
+		 */
+		public function generateExample() {
+			$survey_info = DB::table('surveys')->where('password', "")->orderBy(DB::raw('RAND()'))->first();
+			return redirect()->to("/surveys/answer-survey-page/".urlencode($survey_info->title)."/".$survey_info->link_code);
 		}
 		
 		/**
