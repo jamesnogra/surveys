@@ -16,7 +16,7 @@
 				<a href="/"><i class="material-icons w3-large">home</i> Home</a>
 				<a href="/help"><i class="material-icons w3-large">find_in_page</i> Help</a>
 				<a href="/example"><i class="material-icons w3-large">book</i> Example</a>
-				<a href="/contact-us"><i class="material-icons w3-large">phone</i> Contact Us</a>
+				<a href="http://www.therookieblog.com/#four"><i class="material-icons w3-large">phone</i> Contact Us</a>
 				<a href="/about"><i class="material-icons w3-large">info</i> About</a>
 			</nav>
 		</div>
