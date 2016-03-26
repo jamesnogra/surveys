@@ -57,7 +57,7 @@ return [
             'host'      => env('DB_HOST', 'localhost'),
             'database'  => env('DB_DATABASE', 'survey_db'),
             'username'  => env('DB_USERNAME', 'surveys'),
-            'password'  => env('DB_PASSWORD', 'surveys123'),
+            'password'  => env('DB_PASSWORD', ''),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
